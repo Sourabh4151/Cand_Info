@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Documents</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <script>    
+        async function uploadFiles(event) {
+            event.preventDefault();
+            let formData = new FormData();
+            formData.append("profile", document.getElementById("profile").value);
+            formData.append("mobile_number", document.getElementById("mobile_number").value);
+            formData.append("job_location", document.getElementById("job_location").value);
+            formData.append("aadhar_front", document.getElementById("aadhar_front").files[0]);
+            formData.append("aadhar_back", document.getElementById("aadhar_back").files[0]);
+            formData.append("pan_card", document.getElementById("pan_card").files[0]);
+
+            try {
+                let response = await fetch("/upload", {
+                    method: "POST",
+                    body: formData
+                });
+
+                let result = await response.json();
+                alert(result.message);
+            } catch (error) {
+                alert("An error occurred: " + error.message);
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <h2>Candidate Onboarding Form</h2>
+    <form onsubmit="uploadFiles(event)">
+        <label for="profile">Profile: </label>
+        <select id="profile" required>
+            <option value="" disabled selected>Choose</option>
+            <option value="GFGC - Credit Associate">GFGC - Credit Associate</option>
+            <option value="GFGC - Legal Associate">GFGC - Legal Associate</option>
+            <option value="GFGC - Tech (Civil)">GFGC - Tech (Civil)</option>
+        </select><br><br>
+
+        <label for="mobile_number">Mobile Number: </label>
+        <input type="tel" id="mobile_number" pattern="[0-9]{10}" required><br><br>
+
+        <label for="job_location">Job Location: </label>
+        <input type="text" id="job_location" required><br><br>
+
+        <label for="aadhar_front">Aadhaar Front: </label>
+        <input type="file" id="aadhar_front" required><br><br>
+
+        <label for="aadhar_back">Aadhaar Back: </label>
+        <input type="file" id="aadhar_back" required><br><br>
+
+        <label for="pan_card">PAN Card: </label>
+        <input type="file" id="pan_card" required><br><br>
+
+        <button type="submit">Upload & Extract</button>
+    </form>
+
+</body>
+</html>
